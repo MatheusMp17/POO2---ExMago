@@ -60,48 +60,37 @@ public class Mago {
         return this.pontosManaAtuais;
     }
 
-    public void lancarMagia(int feitico){
+    public int lancarMagia(int feitico){
         if(pontosManaAtuais >= 4){
             switch (feitico) {
                 case 1:
-                System.out.println("Bola de Fogo"); 
-                    break;
-                case 2:
-                    System.out.println("Relâmpago"); 
-                    break;
-                case 3:
-                    System.out.println("Invocar Esqueletos");
-                    break;
-                case 4:
-                    System.out.println("Conjurar Familiar");
-                    break;
-                case 5:
-                    System.out.println("Queda Suave");
-                    break;
-                case 6:
-                    System.out.println("Armadura Arcana");
+                    System.out.println("Bola de Fogo");
+                    pontosManaAtuais -= 4;
+                    return -20;
                 default:
                     System.out.println("Muito bem! agora estou azul!!!");
+                    return 0;
             }
-            pontosManaAtuais -= 4;
         }
         else{
             System.out.println("EU PRECISO DE CAFÉ!!!");
+            return 0;
         }
     }
-    public void lancarMagiaEspecial(){
+    public int lancarMagiaEspecial(){
         if(pontosManaAtuais >= 30){
             System.out.println("Chuva de Meteoros");
             pontosManaAtuais -= 30;
+            return -30;
         }
         else{
-            this.pontosVidaAtuais -= this.pontosVidaAtuais;	
+            this.pontosVidaAtuais -= this.pontosVidaAtuais;
+            return 0;	
         }
     }
     public void alterarVida(int pontosVida){
         if (pontosVida + this.pontosVidaAtuais <= this.pontosVida){
             this.pontosVidaAtuais = pontosVida + this.pontosVidaAtuais;
-            System.out.println("pontos de vida atuais: " + getPontosVidaAtuais());
         }
         else{
             System.out.println("Ação inválida");
@@ -110,7 +99,6 @@ public class Mago {
     public void alterarMana(int pontosMana){
         if (pontosMana + this.pontosManaAtuais <= this.pontosMana && pontosMana + this.pontosManaAtuais >= 0){
             this.pontosManaAtuais += pontosMana;
-            System.out.println("pontos de mana: " + pontosManaAtuais);
         }
         else{
             System.out.println("Ação inválida");
