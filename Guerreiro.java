@@ -1,12 +1,7 @@
-public class Guerreiro {
-    private int pontosVida;
-    private int pontosVigor;
-    private String nome;
-    private int nivel;
-    private int pontosVidaAtuais;
-    private int pontosVigorAtuais;
+public class Guerreiro extends Personagem{
 
-    public Guerreiro(){
+    public Guerreiro(String nome, int resistencia, int nivel){
+        super(nome, resistencia, nivel);
         this.setPontosVida(100);
         this.setPontosVigor(100);
         this.setNome("");
@@ -14,92 +9,100 @@ public class Guerreiro {
         this.setPontosVidaAtuais();
         this.setPontosVigorAtuais();
     }
+    public void agir(Personagem possivelAlvo){
+        String acao;
+        boolean validade = false;
+        System.out.println(""
+        +"_______________________\n"
+        +"AÇÕES:\n"
+        +"[0] atacar com soco\n"
+        +"[1] Ataque leve\n"
+        +"[2] Ataque Pesado\n"
+        +"[3] Defender\n"
+        +"[4] tomar poção de vida\n"
+        +"[5] tomar poção de vigor\n"
+        +"[6] DESISTIR");
+        do{
+            acao = t.nextLine();
+            switch (acao) {
+                case "0":
+                    atacarComSoco(possivelAlvo);
+                    break;
+                case "1":
+                    ataqueLeve(possivelAlvo);
+                    break;
+                case "2":
+                    ataquePesado(possivelAlvo);
+                    break;
+                case "3":
+                    defender();
+                    break;
+                case "4":
+                    tomarPocao(1);
+                    break;
+                case"5":
+                    tomarPocao(2);
+                    break;
+                case "6":
+                    alterarVida(getPontosVidaAtuais(), 1);
+                    break;
+                default:
+                    System.out.println("inválido");
+                    validade = true;
+                    break;
+            }
+            esperar();
+        }while(validade);
+    }
+    @Override
+    public void imprimirPesonagem(int tipo) {
+        System.out.println(""   
++"          (( /--\\ ))\n"
++"            /    \\\n"
++"            |o  o|     /\\\n"   
++"            \\ __ /     ||\n"
++"          ------------ ||\n" 
++"          //|||||||\\\\  ||\n"
++"         // ||||||| \\\\_||_\n"
++"    /\\/\\/\\  |||||||  \\\\||\n"
++"   |      | | | | |\n"
++"    \\    /  | | | |\n"
++"     \\__/   |_| |_|");
+        super.imprimirPesonagem(tipo);
+    }
 
-    public void setPontosVida(int pontosVida){
-        this.pontosVida = pontosVida;
-    }
-    public int getPontosVida(){
-        return this.pontosVida;
-    }
-    public void setPontosVigor(int pontosVigor){
-        this.pontosVigor = pontosVigor;
-    }
-    public int getPontosVigor(){
-        return pontosVigor;
-    }
-    public void setNome(String nome){
-        this.nome = nome;
-    }
-    public String getNome(){
-        return nome;
-    }
-    public void setNivel(int nivel){
-        this.nivel = nivel;
-    }
-    public int getNivel(){
-        return nivel;
-    }
-    public void setPontosVidaAtuais(){
-        this.pontosVidaAtuais = this.pontosVida;
-    }
-    public int getPontosVidaAtuais(){
-        return pontosVidaAtuais;
-    }
-    public void setPontosVigorAtuais(){
-        this.pontosVigorAtuais = this.pontosVigor;
-    }
-    public int getPontosVigorAtuais(){
-        return this.pontosVigorAtuais;
-    }
-
-    public void alterarVida(int pontosVida){
-        if (pontosVida + this.pontosVidaAtuais <= this.pontosVida){
-            this.pontosVidaAtuais = pontosVida + this.pontosVidaAtuais;
-        }
-        else{
-            System.out.println("Ação inválida");
-        }
-    }
-    public void alterarVigor(int pontosVigor){
-        if (pontosVigor + this.pontosVigorAtuais <= this.pontosVigor && pontosVigor + this.pontosVigorAtuais >= 0){
-            this.pontosVigorAtuais += pontosVigor;
-        }
-        else{
-            System.out.println("Ação inválida");
-        }
-    }
-    
-    public int ataqueLeve(){
-        if(20 <= pontosVigorAtuais){
-            pontosVigorAtuais -= 10;
+    public void ataqueLeve(Personagem alvo){
+        int dano = (int) (20 * (getNivel() * 0.5) * 2 ) - alvo.getResistencia(); 
+        alterarVigor(20, 1);
+        if(20 <= getPontosVigorAtuais() && dano > 0){
             System.out.println("Ataque Leve");
-            return -20;
+            alvo.alterarVida(dano, 1);
+        }
+        else{
+            System.out.println("Sem Força!!!");
+        }
+    }
+    public void ataquePesado(Personagem alvo){
+        if(30 <= getPontosVigorAtuais()){
+            int dano = (int) (20 * 2 ) - alvo.getResistencia();
+            alterarVigor(30, 1);
+            if(dano > 0){;
+                alvo.alterarVida(dano, 1);
+                System.out.println("Ataque Pesado");
+            }
         }
         else{
             System.out.println("Sem Vigor!!!");
-            return 0;
         }
     }
-    public int ataquePesado(){
-        if(30 <= pontosVigorAtuais){
-            pontosVigorAtuais -= 30;
-            System.out.println("Ataque Pesado");
-            return -30;
-        }
-        else{
-            System.out.println("Sem Vigor!!!");
-            return 0;
-        }
-    }
-    public int defender(){
-        if(10 <= pontosVigorAtuais){
-            pontosVigorAtuais -= 10;
+    public void defender(){
+        if(10 <= getPontosVigorAtuais()){
+            alterarVigor(10, 1);;
             System.out.println("Defesa");
-            return 25;
+            setResistencia(60);
         }
         else{
             System.out.println("Sem Vigor!!!");
-            return 0;
         }
     }
 }

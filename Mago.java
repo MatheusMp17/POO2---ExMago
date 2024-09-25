@@ -1,108 +1,230 @@
-public class Mago {
-    private int pontosVida;
-    private int pontosMana;
-    private String nome;
+public class Mago extends Personagem{
     private String tipoMagia;
-    private int nivel;
-    private int pontosVidaAtuais;
+    private int pontosMana;
     private int pontosManaAtuais;
-
-    public Mago(){
-        this.setPontosVida(100);
+    public Mago(String nome, int resistencia, int nivel, String tipoMagia){
+        super(nome, resistencia, nivel);
+        this.setPontosVida((int) (getPontosVida() * 0.75));
         this.setPontosMana(100);
-        this.setNome("");
-        this.setTipoMagia("");
-        this.setNivel(1);
+        this.setTipoMagia(tipoMagia);
         this.setPontosVidaAtuais();
-        this.setPontosManaAtuais();
+        this.setPontosManaAtuais(getPontosMana());
     }
 
-    public void setPontosVida(int pontosVida){
-        this.pontosVida = pontosVida;
+    @Override
+    public void setPontosVigor(int pontosVigor){
     }
-    public int getPontosVida(){
-        return this.pontosVida;
+    @Override
+    public int getPontosVigor(){
+        return 0;
     }
-    public void setPontosMana(int pontosMana){
-        this.pontosMana = pontosMana;
+    @Override
+    public void setPontosVigorAtuais(){
     }
-    public int getPontosMana(){
-        return(pontosMana);
+    @Override
+    public int getPontosVigorAtuais(){
+        return 0;
     }
-    public void setNome(String nome){
-        this.nome = nome;
+    @Override
+    public void atacarComSoco(Personagem atacado) {
+        int dano;
+        dano = (10 * (int) (getNivel() * 0.2) ) - atacado.getResistencia();
+        if(dano > 0 && pontosManaAtuais >= 5){
+            atacado.alterarVida(dano, 1);
+            System.out.println("Golpe Mágico!!!");
+            alterarMana(10, 1);
+        }
+        else{
+            System.out.println("Não possui forças para ferir seu adversario");
+        }            
     }
-    public String getNome(){
-        return nome;
+    @Override
+    public void alterarVigor(int alterarVigor, int tipo) {
     }
+    @Override
+    public void tomarPocao(int tipo) {
+        switch (tipo) {
+            case 1:
+                alterarVida(30, 2);
+                break;
+            case 2:
+                alterarMana(30, 2);
+                break;
+            default:
+                break;
+        }
+    }
+    @Override
+    public void imprimirPesonagem(int tipo){
+        switch (tipo) {
+            case 1:
+            System.out.println("\n" 
+            +"       /\\\n"
+            +"      /  \\     /\\\n"
+            +"   ----------  \\/\n"
+            +"    ( o o )    ||\n"
+            +"   ::::::::::  ||\n"
+            +"  //|||||||\\\\  ||\n"
+            +" // ||||||| \\\\ ||\n"
+            +" || |||||||  \\\\||\n"
+            +"    | | | |    ||\n"
+            +"    | | | |    ||\n"
+            +"    |_| |_|    ||");
+            esperar();
+                break;
+            case 2:
+                System.out.println("\n" 
+            +"       /\\\n"
+            +"      /  \\     /\\\n"
+            +"   ----------  \\/\n"
+            +"    ( o o )    ||\n"
+            +"   ::::::::::  ||\n"
+            +"  //|||||||\\\\  ||\n"
+            +" // ||||||| \\\\ ||\n"
+            +"||| |||||||  \\\\||\n"
+            +"    | | | |    ||\n"
+            +"    | | | |    ||\n"
+            +"    |_| |_|    ||");
+            System.out.println(""
+            +"         STATUS"
+            +"\n--------------------------" 
+            +"\nNome: " + getNome()
+            +"\nNível: " + getNivel()
+            +"\nTipo da Magia: " + getTipoMagia()
+            +"\nVida: " + getPontosVidaAtuais() + "/" + getPontosVida()
+            +"\nMana: " + getPontosManaAtuais() + "/" + getPontosMana()
+            +"\nResistência: " + getResistencia()
+            +"\n--------------------------");
+            esperar();
+            default:
+                break;
+        }
+    }
+    @Override
+    public void agir(Personagem possivelAlvo){
+        String acao;
+        boolean validade = false;
+        System.out.println(""
+        +"_______________________\n"
+        +"AÇÕES:\n"
+        +"[0] atacar com soco\n"
+        +"[1] Lançar magia\n"
+        +"[2] Lançar magia ESPECIAL\n"
+        +"[3] tomar poção de vida\n"
+        +"[4] tomar poção de mana\n"
+        +"[5] DESISTIR");
+        do{
+            acao = t.nextLine();
+            switch (acao) {
+                case "0":
+                    atacarComSoco(possivelAlvo);
+                    break;
+                case "1":
+                    lancarMagia(possivelAlvo);
+                    break;
+                case "2":
+                    lancarMagiaPoderosa(possivelAlvo);
+                    break;
+                case "3":
+                    tomarPocao(1);
+                    break;
+                case"4":
+                    tomarPocao(2);
+                    break;
+                case "5":
+                    alterarVida(getPontosVidaAtuais(), 1);
+                    break;
+                default:
+                    System.out.println("inválido");
+                    validade = true;
+                    break;
+            }
+            esperar();
+        }while(validade);
+    }
+
+
     public void setTipoMagia(String tipoMagia){
         this.tipoMagia = tipoMagia;
     }
     public String getTipoMagia(){
-        return tipoMagia;
+        return this.tipoMagia;
     }
-    public void setNivel(int nivel){
-        this.nivel = nivel;
+    public void setPontosMana(int pontosMana){
+        if(pontosMana > 0 ){
+            this.pontosMana = pontosMana;
+        }
     }
-    public int getNivel(){
-        return nivel;
+    public int getPontosMana(){
+        return this.pontosMana;
     }
-    public void setPontosVidaAtuais(){
-        this.pontosVidaAtuais = this.pontosVida;
-    }
-    public int getPontosVidaAtuais(){
-        return pontosVidaAtuais;
-    }
-    public void setPontosManaAtuais(){
-        this.pontosManaAtuais = this.pontosMana;
+    public void setPontosManaAtuais(int pontosMana){
+        if(pontosMana > 0 && pontosMana <= getPontosMana()){
+        this.pontosManaAtuais = pontosMana;
+        }
+        else if(pontosMana >= getPontosMana()){
+            pontosManaAtuais = getPontosMana();
+        }
     }
     public int getPontosManaAtuais(){
         return this.pontosManaAtuais;
     }
 
-    public int lancarMagia(int feitico){
-        if(pontosManaAtuais >= 4){
-            switch (feitico) {
+    public void alterarMana(int valor, int tipo){
+        if(getPontosManaAtuais() - valor >= 0 && tipo == 1){
+            setPontosManaAtuais(getPontosManaAtuais() - valor);
+        }
+        else 
+            setPontosManaAtuais(0);
+        if(getPontosManaAtuais() + valor <= getPontosMana() && tipo == 2){
+            setPontosManaAtuais(getPontosVidaAtuais() + valor);
+        }
+        else
+            setPontosManaAtuais(getPontosMana());
+    }
+    public void lancarMagia(Personagem alvo){
+        int tipo;
+        if(getPontosManaAtuais() > 10){
+        System.out.println("Tipos de Magia:"
+        +"\n[1] Magia Elemental"
+        +"\n[2] Armadura Arcana");
+        tipo = t.nextInt();
+        System.out.println("Conjurando mágica...");
+        System.out.println("..");
+        System.out.println(".");
+        esperar();
+            switch (tipo) {
                 case 1:
-                    System.out.println("Bola de Fogo");
-                    pontosManaAtuais -= 4;
-                    return -20;
+                    int dano = (30 * (int) (getNivel() * 0.2) ) - ((int)0.5 * alvo.getResistencia());
+                    if(dano > 0){
+                        alvo.alterarVida(dano, 1);
+                        System.out.println("Raio de " + getTipoMagia());
+                    }
+                    break;
+                case 2:
+                        setResistencia(50);
+                        System.out.println("Blindado magicamente");
+                    break;        
+            
                 default:
-                    System.out.println("Muito bem! agora estou azul!!!");
-                    return 0;
+                    break;
             }
+            alterarMana(10, 1);
         }
-        else{
-            System.out.println("EU PRECISO DE CAFÉ!!!");
-            return 0;
-        }
+        else
+        System.out.println("PRECISO DE CAFÉ!!!");
     }
-    public int lancarMagiaEspecial(){
-        if(pontosManaAtuais >= 30){
-            System.out.println("Chuva de Meteoros");
-            pontosManaAtuais -= 30;
-            return -30;
-        }
-        else{
-            this.pontosVidaAtuais -= this.pontosVidaAtuais;
-            return 0;	
-        }
+    private void lancarMagiaPoderosa(Personagem alvo){
+        System.out.println("Conjurando mágica...");
+        esperar();
+        System.out.println("..");
+        esperar();
+        System.out.println(".");
+        esperar();
+        System.out.println("KABOOM!!!");
+        alterarMana(getPontosManaAtuais(), 1);
+        alterarVida(getPontosVida(), 1);
+        alvo.alterarVida(alvo.getPontosVidaAtuais(), 1);
     }
-    public void alterarVida(int pontosVida){
-        if (pontosVida + this.pontosVidaAtuais <= this.pontosVida){
-            this.pontosVidaAtuais = pontosVida + this.pontosVidaAtuais;
-        }
-        else{
-            System.out.println("Ação inválida");
-        }
-    }
-    public void alterarMana(int pontosMana){
-        if (pontosMana + this.pontosManaAtuais <= this.pontosMana && pontosMana + this.pontosManaAtuais >= 0){
-            this.pontosManaAtuais += pontosMana;
-        }
-        else{
-            System.out.println("Ação inválida");
-        }
-    }
-}
 
+}
