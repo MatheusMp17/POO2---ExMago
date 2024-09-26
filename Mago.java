@@ -4,7 +4,7 @@ public class Mago extends Personagem{
     private int pontosManaAtuais;
     public Mago(String nome, int resistencia, int nivel, String tipoMagia){
         super(nome, resistencia, nivel);
-        this.setPontosVida((int) (getPontosVida() * 0.75));
+        this.setPontosVidaMax((int) (getPontosVidaMax() * 0.75));
         this.setPontosMana(100);
         this.setTipoMagia(tipoMagia);
         this.setPontosVidaAtuais();
@@ -91,7 +91,7 @@ public class Mago extends Personagem{
             +"\nNome: " + getNome()
             +"\nNível: " + getNivel()
             +"\nTipo da Magia: " + getTipoMagia()
-            +"\nVida: " + getPontosVidaAtuais() + "/" + getPontosVida()
+            +"\nVida: " + getPontosVidaAtuais() + "/" + getPontosVidaMax()
             +"\nMana: " + getPontosManaAtuais() + "/" + getPontosMana()
             +"\nResistência: " + getResistencia()
             +"\n--------------------------");
@@ -223,7 +223,7 @@ public class Mago extends Personagem{
         esperar();
         System.out.println("KABOOM!!!");
         alterarMana(getPontosManaAtuais(), 1);
-        alterarVida(getPontosVida(), 1);
+        alterarVida(getPontosVidaMax(), 1);
         alvo.alterarVida(alvo.getPontosVidaAtuais(), 1);
     }
 

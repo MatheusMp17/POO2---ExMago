@@ -1,9 +1,9 @@
 import java.util.Scanner;
-
+import java.util.concurrent.*;
 public class Personagem {
     public Scanner t = new Scanner(System.in);
     private String nome;
-    private int pontosVida;
+    private int pontosVidaMax;
     private int pontosVigor;
     private int nivel;
     private int pontosVidaAtuais;
@@ -11,7 +11,7 @@ public class Personagem {
     private int resistencia;
     private int resistenciaAbsoluta;
     public Personagem(String nome, int resistencia, int nivel){
-        this.setPontosVida(100);
+        this.setPontosVidaMax(100);
         this.setPontosVigor(100);
         this.setNome(nome);
         this.setNivel(nivel);
@@ -21,14 +21,14 @@ public class Personagem {
         this.setResistenciaAbsoluta(resistencia);
     }
 
-    public void setPontosVida(int pontosVida){
-        this.pontosVida = pontosVida;
+    public void setPontosVidaMax(int pontosVida){
+        this.pontosVidaMax = pontosVida;
     }
-    public int getPontosVida(){
-        return this.pontosVida;
+    public int getPontosVidaMax(){
+        return this.pontosVidaMax;
     }
     public void setResistencia(int resistencia){
-        this.resistencia = resistencia;
+        this.resistencia = resistencia * (int) (nivel * 0.5);
     }
     public int getResistencia(){
         return this.resistencia;
@@ -52,7 +52,7 @@ public class Personagem {
         return nivel;
     }
     public void setPontosVidaAtuais(){
-        this.pontosVidaAtuais = this.pontosVida;
+        this.pontosVidaAtuais = this.pontosVidaMax;
     }
     public int getPontosVidaAtuais(){
         return pontosVidaAtuais;
@@ -72,15 +72,15 @@ public class Personagem {
 
     protected void alterarVida(int alterarVida, int tipo){
         if(getPontosVidaAtuais() - alterarVida >= 0 && tipo == 1){
-            pontosVidaAtuais = getPontosVidaAtuais() - alterarVida;
+            this.pontosVidaAtuais = getPontosVidaAtuais() - alterarVida;
         }
-        else
-            pontosVidaAtuais -= pontosVidaAtuais; 
-        if(getPontosVidaAtuais() + alterarVida <= getPontosVida() && tipo == 2){
-            pontosVidaAtuais = getPontosVidaAtuais() + alterarVida;
+        else if((getPontosVidaAtuais() - alterarVida < 0 && tipo == 1)){
+            this.pontosVidaAtuais = 0;}
+        else if(getPontosVidaAtuais() + alterarVida <= getPontosVidaMax() && tipo == 2){
+            this.pontosVidaAtuais = getPontosVidaAtuais() + alterarVida;
         }
-        else
-            pontosVidaAtuais = getPontosVida();
+        else{
+            this.pontosVidaAtuais = getPontosVidaMax();}
     }
 
     protected void alterarVigor(int alterarVigor, int tipo){
@@ -120,6 +120,7 @@ public class Personagem {
     
     public void esperar(){
         t.nextLine();
+        //TimeUnit.SECONDS.sleep(2000);
     }
     public void passarTurno(Personagem personagem){
         setResistencia(getResistenciaAbsoluta() - 5);
@@ -131,8 +132,8 @@ public class Personagem {
         +"\n--------------------------" 
         +"\nNome: " + getNome()
         +"\nNível: " + getNivel()
-        +"\nVida: " + getPontosVidaAtuais() + "/" + getPontosVida()
-        +"\nVigor: " + getPontosVidaAtuais() + "/" + getPontosVigor()
+        +"\nVida: " + getPontosVidaAtuais() + "/" + getPontosVidaMax()
+        +"\nVigor: " + getPontosVigorAtuais() + "/" + getPontosVigor()
         +"\nResistência: " + getResistencia()
         +"\n--------------------------");
         esperar();

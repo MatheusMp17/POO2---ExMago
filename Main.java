@@ -5,7 +5,6 @@ public class Main{
         String nome;
         boolean validade = false;
         int escolhaPj;
-        String opcoes;
         boolean jogo = true;
         Personagem p1;
         Personagem p2;
@@ -17,6 +16,7 @@ public class Main{
         +"---------------------");
         t.nextLine();
         do{
+            validade = true;
             System.out.println("Jogador 1 escolha seu personagem:");
             System.out.print(""
             +"AÇÕES: \n"
@@ -26,7 +26,8 @@ public class Main{
             escolhaPj = t.nextInt();
             System.out.print("Qual é o nome de seu personagem: ");
             nome = t.next();
-            p1 = new Personagem(nome, 10, 1);
+            p1 = null;
+            //p1 = new Personagem(nome, 10, 1);
             switch (escolhaPj) {
                 case 1:
                     p1 = new Clerigo(nome, 20, 1, "Sacra");
@@ -41,11 +42,12 @@ public class Main{
                     validade = false;
                     break;
             }
-        }while(validade);
+        }while(!validade);
         t.nextLine();
         System.out.println();
        //selecao de personagem
        do{
+            validade = true;
             System.out.println("Jogador 2 escolha seu personagem:");
             System.out.print(""
             +"AÇÕES: \n"
@@ -55,7 +57,7 @@ public class Main{
             escolhaPj = t.nextInt();
             System.out.print("Qual é o nome de seu personagem: ");
             nome = t.next();
-            p2 = new Personagem(nome, 10, 1);
+            p2 = null;
             switch (escolhaPj) {
                 case 1:
                     p2 = new Clerigo(nome, 20, 1, "Sacra");
@@ -70,14 +72,12 @@ public class Main{
                     validade = false;
                     break;
             }
-        }while(validade);
+        }while(!validade);
         while(jogo == true){
             p1.imprimirPesonagem(2);
             p1.agir(p2);
-            p1.esperar();
             p2.imprimirPesonagem(2);
             p2.agir(p1);
-            p2.esperar();
             if(p1.getPontosVidaAtuais() <= 0){
                 System.out.println(p1.getNome() + " foi derrotado!!!");
                 jogo = false;
@@ -87,6 +87,8 @@ public class Main{
                 jogo = false;
             }
             ++turno;
+
+
         }
     }
 }

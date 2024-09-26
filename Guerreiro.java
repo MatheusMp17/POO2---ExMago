@@ -2,7 +2,7 @@ public class Guerreiro extends Personagem{
 
     public Guerreiro(String nome, int resistencia, int nivel){
         super(nome, resistencia, nivel);
-        this.setPontosVida(100);
+        this.setPontosVidaMax(100);
         this.setPontosVigor(100);
         this.setNome("");
         this.setNivel(1);

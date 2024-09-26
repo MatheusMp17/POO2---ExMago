@@ -68,7 +68,7 @@ public class Clerigo extends Mago{
             +"\nNome: " + getNome()
             +"\nNível: " + getNivel()
             +"\nTipo da Magia: " + getTipoMagia()
-            +"\nVida: " + getPontosVidaAtuais() + "/" + getPontosVida()
+            +"\nVida: " + getPontosVidaAtuais() + "/" + getPontosVidaMax()
             +"\nMana: " + getPontosManaAtuais() + "/" + getPontosMana()
             +"\nResistência: " + getResistencia()
             +"\n--------------------------");
